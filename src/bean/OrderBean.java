@@ -19,6 +19,9 @@ public class OrderBean {
     private String acceptance_student_number;//接单人学号
     private double score;             //评分
     private String state;          //状态
+    private String complaint_content; //举报内容
+    private Date complaint_time;       //举报时间
+    private String complaint_student_id;  //举报人
     private int MAX_SCORE = 5;
 
     public int getOrder_id() {
@@ -109,6 +112,29 @@ public class OrderBean {
         this.state = state;
     }
 
+    public String getComplaint_content() {
+        return complaint_content;
+    }
+
+    public void setComplaint_content(String complaint_content) {
+        this.complaint_content = complaint_content;
+    }
+
+    public Date getComplaint_time() {
+        return complaint_time;
+    }
+
+    public void setComplaint_time(Date complaint_time) {
+        this.complaint_time = complaint_time;
+    }
+
+    public String getComplaint_student_id() {
+        return complaint_student_id;
+    }
+
+    public void setComplaint_student_id(String complaint_student_id) {
+        this.complaint_student_id = complaint_student_id;
+    }
 
     public boolean check(String method) {
         switch (method) {
