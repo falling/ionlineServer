@@ -119,9 +119,24 @@ public class OrderDAOImpl extends DAO<OrderBean> {
      * @return
      */
     public List<OrderBean> getOrderByLocation(OrderBean orderBean) {
-        String sql = "select * from OrderTable where state = 0 and location = ?";
-        return getForList(sql,orderBean.getEndLocation());
+        String sql = "select * from OrderTable where state = 0 ";
+
+        if(orderBean.getStartLocation()!=null && orderBean.getEndLocation()!=null) {
+            sql += "and startLocation = ? and endLocation = ?";
+            return getForList(sql, orderBean.getStartLocation(), orderBean.getEndLocation());
+        }
+        if(orderBean.getStartLocation()!=null){
+            sql += "and startLocation = ?";
+            return getForList(sql,orderBean.getStartLocation());
+        }
+        if(orderBean.getEndLocation()!=null){
+            sql += "and endLocation = ?";
+            return getForList(sql,orderBean.getEndLocation());
+        }
+        return null;
     }
+
+
 
     /**
      * 获取未评分的order

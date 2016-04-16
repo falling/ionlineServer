@@ -38,7 +38,6 @@ public class OrderServlet extends HttpServlet {
     public static final String METHOD = "method";
     public static final String GET_ORDER_ALL = "getOrderAll";
     public static final String LOSE_LABLE = "lose lable";
-    public static final String LOSE_LOCATION = "lose location";
     public static final String UPDATE_SCORE = "updateScore";
     public static final String GET_ALL_NO_SCORE = "getAllNoScore";
     public static final String GET_ORDER_BY_LOCATION = "getOrderByLocation";
@@ -132,13 +131,11 @@ public class OrderServlet extends HttpServlet {
                         response.getWriter().print(LOSE_LABLE);
                     }
                     break;
+
                 case GET_ORDER_BY_LOCATION://按地点获取任务
-                    if (orderBean.getEndLocation() != null && orderBean.getEndLocation().length() > 0) {
                         response.getWriter().print(gson.toJson(orderDAO.getOrderByLocation(orderBean)));
-                    } else {
-                        response.getWriter().print(LOSE_LOCATION);
-                    }
                     break;
+
                 case GET_ALL_NO_SCORE:  //获取未评分的Order
                     response.getWriter().print(gson.toJson(orderDAO.getAllNoScore(orderBean)));
                     break;
