@@ -11,7 +11,8 @@ public class OrderBean {
     private int order_id;          //单号id
     private String release_student_number;   //发布人学号
     private Date time;           //发布时间
-    private String location;       //交任务地点
+    private String startLocation;  //任务起始地点
+    private String endLocation;       //交任务地点
     private String content;        //任务内容
     private String lable;          //任务标签（跑腿，代买。。。）
     private double tip;            // 小费
@@ -40,16 +41,24 @@ public class OrderBean {
         return time;
     }
 
+    public String getStartLocation() {
+        return startLocation;
+    }
+
+    public void setStartLocation(String startLocation) {
+        this.startLocation = startLocation;
+    }
+
     public void setTime(Date time) {
         this.time = time;
     }
 
-    public String getLocation() {
-        return location;
+    public String getEndLocation() {
+        return endLocation;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setEndLocation(String endLocation) {
+        this.endLocation = endLocation;
     }
 
     public String getContent() {
@@ -106,7 +115,8 @@ public class OrderBean {
             case OrderServlet.RELEASE_ORDER:
                 return release_student_number != null
                         && release_student_number.length() > 0
-                        && location != null && location.length() > 0
+                        && startLocation != null && startLocation.length() > 0
+                        && endLocation != null && endLocation.length() > 0
                         && content != null && content.length() > 0
                         && lable != null && lable.length() > 0;
             case OrderServlet.ACCEPT_ORDER:

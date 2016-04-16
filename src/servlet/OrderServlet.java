@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by falling on 2016/3/12.
@@ -26,7 +25,8 @@ public class OrderServlet extends HttpServlet {
     public static final String COMPLETE_ORDER = "completeOrder";
     public static final String GIVE_UP_ORDER = "giveUpOrder";
     public static final String LOSE_METHOD = "lose method";
-    public static final String LOCATION = "location";
+    public static final String END_LOCATION = "endLocation";
+    public static final String START_LOCATION = "startLocation";
     public static final String RELEASE_STUDENT_NUMBER = "release_student_number";
     public static final String CONTENT = "content";
     public static final String LABLE = "lable";
@@ -133,7 +133,7 @@ public class OrderServlet extends HttpServlet {
                     }
                     break;
                 case GET_ORDER_BY_LOCATION://按地点获取任务
-                    if (orderBean.getLocation() != null && orderBean.getLocation().length() > 0) {
+                    if (orderBean.getEndLocation() != null && orderBean.getEndLocation().length() > 0) {
                         response.getWriter().print(gson.toJson(orderDAO.getOrderByLocation(orderBean)));
                     } else {
                         response.getWriter().print(LOSE_LOCATION);
@@ -177,7 +177,8 @@ public class OrderServlet extends HttpServlet {
         orderBean.setOrder_id(request.getParameter(ORDER_ID) == null ? -1 : Integer.parseInt(request.getParameter(ORDER_ID)));
         orderBean.setRelease_student_number(request.getParameter(RELEASE_STUDENT_NUMBER));
         orderBean.setTime(new Date());
-        orderBean.setLocation(request.getParameter(LOCATION));
+        orderBean.setEndLocation(request.getParameter(END_LOCATION));
+        orderBean.setStartLocation(request.getParameter(START_LOCATION));
         orderBean.setContent(request.getParameter(CONTENT));
         orderBean.setLable(request.getParameter(LABLE));
         orderBean.setTip(request.getParameter(TIP) == null ? -1 : Double.parseDouble(request.getParameter(TIP)));

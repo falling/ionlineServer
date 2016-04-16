@@ -17,6 +17,8 @@ public class OrderDAOImpl extends DAO<OrderBean> {
     public static final String STATE_RELEASE = "0";
     public static final String STATE_ACCEPT = "1";
     public static final String STATE_COMPLETE = "2";
+    public static final String START_LOCATION = "startLocation";
+    public static final String END_LOCATION = "endLocation";
 
     /**
      * 发布任务
@@ -25,8 +27,8 @@ public class OrderDAOImpl extends DAO<OrderBean> {
      * @return 返回成功或者失败
      */
     public boolean insert(OrderBean orderBean) {
-        String sql = "INSERT INTO OrderTable("+ OrderServlet.RELEASE_STUDENT_NUMBER+",time(),location,content,lable,tip,state) values(?,?,?,?,?,?,?)";
-        return update(sql, orderBean.getRelease_student_number(), orderBean.getTime(), orderBean.getLocation(), orderBean.getContent(), orderBean.getLable(), orderBean.getTip(), STATE_RELEASE);
+        String sql = "INSERT INTO OrderTable("+ OrderServlet.RELEASE_STUDENT_NUMBER+ ",time," + START_LOCATION + "," + END_LOCATION + ",content,lable,tip,state) values(?,now(),?,?,?,?,?,?)";
+        return update(sql, orderBean.getRelease_student_number(),orderBean.getStartLocation(),orderBean.getEndLocation(), orderBean.getContent(), orderBean.getLable(), orderBean.getTip(), STATE_RELEASE);
     }
 
     /**
@@ -35,7 +37,7 @@ public class OrderDAOImpl extends DAO<OrderBean> {
      * @param orderBean
      * @return
      */
-    public boolean acceptOrder(OrderBean orderBean) {
+    public synchronized boolean acceptOrder(OrderBean orderBean) {
         String sql = "update OrderTable set "+ OrderServlet.ACCEPTANCE_STUDENT_NUMBER +" = ?,state = ?  where state = ? and order_id = ? and "+ OrderServlet.RELEASE_STUDENT_NUMBER+" != ?";
         return update(sql, orderBean.getAcceptance_student_number(), STATE_ACCEPT, STATE_RELEASE, orderBean.getOrder_id(), orderBean.getAcceptance_student_number());
     }
@@ -118,7 +120,7 @@ public class OrderDAOImpl extends DAO<OrderBean> {
      */
     public List<OrderBean> getOrderByLocation(OrderBean orderBean) {
         String sql = "select * from OrderTable where state = 0 and location = ?";
-        return getForList(sql,orderBean.getLocation());
+        return getForList(sql,orderBean.getEndLocation());
     }
 
     /**
