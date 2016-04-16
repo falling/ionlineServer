@@ -188,4 +188,9 @@ public class OrderDAOImpl extends DAO<OrderBean> {
         return false;
     }
 
+
+    public boolean complaint(OrderBean orderBean){
+        String sql = "update OrderTable set complaint_content =? ,complaint_time = now(), complaint_student_number = ? where order_id  = ?";
+        return update(sql,orderBean.getComplaint_content(),orderBean.getComplaint_student_number(),orderBean.getOrder_id());
+    }
 }

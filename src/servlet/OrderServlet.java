@@ -46,6 +46,9 @@ public class OrderServlet extends HttpServlet {
     public static final String GET_ORDER_BY_ID = "getOrderById";
     public static final String GET_ACCEPTED_ORDER = "getAcceptedOrder";
     public static final String GET_RELEASED_ORDER = "getReleasedOrder";
+    public static final String COMPLAINT = "complaint";
+    public static final String COMPLAINT_STUDENT_NUMBER = "complaint_student_number";
+    public static final String COMPLAINT_CONTENT = "complaint_content";
     private OrderDAOImpl orderDAO = new OrderDAOImpl();
     private Gson gson = new Gson();
 
@@ -161,6 +164,18 @@ public class OrderServlet extends HttpServlet {
                     }
                     break;
 
+                case COMPLAINT:
+                    if(orderBean.check(COMPLAINT)){
+                        if (orderDAO.complaint(orderBean)) {
+                            response.getWriter().print(FinalString.SUCCESS);
+                        } else {
+                            response.getWriter().print(FinalString.FAILED);
+                        }
+                    }else {
+                        response.getWriter().print(FinalString.CHECK_FAILED);
+                    }
+                    break;
+
 
             }
         } else {
@@ -182,6 +197,8 @@ public class OrderServlet extends HttpServlet {
         orderBean.setAcceptance_student_number(request.getParameter(ACCEPTANCE_STUDENT_NUMBER));
         orderBean.setScore(request.getParameter(SCORE) == null ? -1 : Double.parseDouble(request.getParameter(SCORE)));
         orderBean.setState(request.getParameter(STATE));
+        orderBean.setComplaint_content(request.getParameter(COMPLAINT_CONTENT));
+        orderBean.setComplaint_student_number(request.getParameter(COMPLAINT_STUDENT_NUMBER));
 
         return orderBean;
     }

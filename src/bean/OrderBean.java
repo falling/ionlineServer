@@ -21,7 +21,7 @@ public class OrderBean {
     private String state;          //状态
     private String complaint_content; //举报内容
     private Date complaint_time;       //举报时间
-    private String complaint_student_id;  //举报人
+    private String complaint_student_number;  //举报人
     private int MAX_SCORE = 5;
 
     public int getOrder_id() {
@@ -128,32 +128,40 @@ public class OrderBean {
         this.complaint_time = complaint_time;
     }
 
-    public String getComplaint_student_id() {
-        return complaint_student_id;
+    public String getComplaint_student_number() {
+        return complaint_student_number;
     }
 
-    public void setComplaint_student_id(String complaint_student_id) {
-        this.complaint_student_id = complaint_student_id;
+    public void setComplaint_student_number(String complaint_student_number) {
+        this.complaint_student_number = complaint_student_number;
     }
 
     public boolean check(String method) {
         switch (method) {
             case OrderServlet.RELEASE_ORDER:
-                return release_student_number != null
-                        && release_student_number.length() > 0
-                        && startLocation != null && startLocation.length() > 0
-                        && endLocation != null && endLocation.length() > 0
-                        && content != null && content.length() > 0
-                        && lable != null && lable.length() > 0;
+                return isLegal(release_student_number)
+                        && isLegal(startLocation)
+                        && isLegal(endLocation)
+                        && isLegal(content)
+                        && isLegal(lable);
             case OrderServlet.ACCEPT_ORDER:
-                return acceptance_student_number != null && acceptance_student_number.length() > 0
+                return isLegal(acceptance_student_number)
                         &&order_id > 0;
             case OrderServlet.UPDATE_SCORE:
-                return release_student_number != null && release_student_number.length() > 0
+                return isLegal(release_student_number)
                         && order_id >= 0
                         && score >= 0 && score <= MAX_SCORE;
+
+            case OrderServlet.COMPLAINT:
+                return isLegal(complaint_content)
+                        && isLegal(complaint_student_number)
+                        && order_id >0;
         }
 
         return false;
+    }
+
+    private boolean isLegal(String str) {
+        return str != null && str.length() > 0;
     }
 }
