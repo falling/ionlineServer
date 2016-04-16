@@ -14,7 +14,7 @@ public class QuestionDAOImpl extends DAO<QuestionBean> {
      * 获取问题列表
      * @return
      */
-    public List<QuestionBean> getAllOrder(){
+    public List<QuestionBean> getAllQuestion(){
         String sql ="select * from questionTable order by id DESC";
         return getForList(sql);
     }

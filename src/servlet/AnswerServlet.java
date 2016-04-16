@@ -1,8 +1,8 @@
 package servlet;
 
-import bean.QuestionBean;
+import bean.AnswerBean;
 import com.google.gson.Gson;
-import dao.Impl.QuestionDAOImpl;
+import dao.Impl.AnswerDAOImpl;
 import stringvalue.FinalString;
 
 import javax.servlet.ServletException;
@@ -15,16 +15,18 @@ import java.io.IOException;
 /**
  * Created by falling on 2016/4/16.
  */
-@WebServlet(name = "QuestionServlet", urlPatterns = "/question")
-public class QuestionServlet extends HttpServlet {
-    public static final String STUDENT_NUMBER = "studentNumber";
-    public static final String QUESTION = "question";
-    public static final String METHOD = "method";
+@WebServlet(name = "AnswerServlet", urlPatterns = "/answer")
+public class AnswerServlet extends HttpServlet {
+
     public static final String LOSE_METHOD = "lose method";
-    public static final String PUT_QUESTION = "putQuestion";
-    public static final String GET_QUESTIONS = "getQuestions";
-    private QuestionDAOImpl questionDAO = new QuestionDAOImpl();
+    public static final String STUDENT_NUMBER = "studentNumber";
+    public static final String CONTENT = "content";
+    public static final String GET_ANSWERS = "getAnswers";
+    public static final String PUT_ANSWER = "putAnswer";
+    public static final String QUESTION_ID = "question_id";
+
     Gson gson = new Gson();
+    AnswerDAOImpl answerDAO = new AnswerDAOImpl();
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -33,33 +35,34 @@ public class QuestionServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
-
-        String method = request.getHeader(METHOD);
+        String method = request.getHeader("method");
         String apikey = request.getHeader(FinalString.APIKEY);
+
         if (method != null && apikey != null && apikey.equals(FinalString.APIKEY_TRUE)) {
+            int id = Integer.parseInt(request.getParameter(QUESTION_ID));
             switch (method) {
-                case GET_QUESTIONS:
-                    response.getWriter().print(gson.toJson(questionDAO.getAllQuestion()));
+                case GET_ANSWERS:
+                    response.getWriter().print(gson.toJson(answerDAO.getAllAnswerByQuestionId(id)));
                     break;
-                case PUT_QUESTION:
+
+                case PUT_ANSWER:
                     String studentNumber = request.getParameter(STUDENT_NUMBER);
-                    String question = request.getParameter(QUESTION);
-                    if (studentNumber != null && question != null && question.length() > 0 && question.length() > 0) {
-                        QuestionBean bean = new QuestionBean(studentNumber, question);
-                        if (questionDAO.insert(bean)) {
+                    String content = request.getParameter(CONTENT);
+                    if (studentNumber != null && content != null && studentNumber.length() > 0 && content.length() > 0) {
+                        AnswerBean answerBean = new AnswerBean(id, studentNumber, content);
+                        if (answerDAO.answerTheQuestion(answerBean)) {
                             response.getWriter().print(FinalString.SUCCESS);
                         } else {
                             response.getWriter().print(FinalString.FAILED);
                         }
-                    } else {
+                    }else{
                         response.getWriter().print(FinalString.LOSE_PARAMETERS);
                     }
                     break;
             }
 
-
         } else {
-            response.getWriter().print(FinalString.ERROR_APIKEY + "OR" + LOSE_METHOD);
+            response.getWriter().print(FinalString.ERROR_APIKEY + " OR " + LOSE_METHOD);
         }
     }
 }
